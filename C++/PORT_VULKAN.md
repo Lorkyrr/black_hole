@@ -21,8 +21,7 @@ Documento de estudo. Complementa o [`README.md`](README.md) (como rodar) e o [`T
 ```
 black_hole/
 ├── README.md                  # README geral (inglês)
-├── Go/, Rust/                 # ports posteriores (Go/OpenGL e Rust/wgpu), cada um com seus docs
-├── Gravity_Sim.zip            # não foi tocado (contém código-fonte antigo do autor)
+├── Go/, Rust/, Python/, Java/ # ports posteriores (OpenGL, wgpu, Vulkan, Vulkan), cada um com seus docs
 └── C++/
     ├── README.md              # como compilar e rodar
     ├── PORT_VULKAN.md         # este documento
@@ -215,4 +214,5 @@ Controles (os mesmos do original): botão esquerdo orbita, scroll dá zoom, `G` 
 
 ## 10. Observações fora do escopo
 
-- `Rust/` e `Go/` são ports posteriores da mesma simulação, documentados em [`../Rust/PORT_RUST.md`](../Rust/PORT_RUST.md) e [`../Go/PORT_GO.md`](../Go/PORT_GO.md). Os erros de compilação do `wgpu`/`glam` citados numa versão anterior deste texto foram corrigidos (`cargo test` passa).
+- `Go/`, `Rust/`, `Python/` e `Java/` são ports posteriores da mesma simulação, documentados em [`../Go/PORT_GO.md`](../Go/PORT_GO.md), [`../Rust/PORT_RUST.md`](../Rust/PORT_RUST.md), [`../Python/PORT_PYTHON.md`](../Python/PORT_PYTHON.md) e [`../Java/PORT_JAVA.md`](../Java/PORT_JAVA.md).
+- `Gravity_Sim.zip` (código antigo do autor original) foi removido do fork junto com o port Java; continua no upstream e no histórico. Os erros de compilação do `wgpu`/`glam` citados numa versão anterior deste texto foram corrigidos (`cargo test` passa).

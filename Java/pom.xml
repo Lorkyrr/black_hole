@@ -44,6 +44,12 @@
   <build>
     <finalName>black_hole_java</finalName>
     <plugins>
+      <!-- o surefire padrão do Maven é antigo e não executa JUnit 5 ("Tests run: 0") -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+      </plugin>
       <!-- jar único com tudo dentro: java -jar target/black_hole_java.jar -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -7,7 +7,7 @@ Documento de estudo. Complementa o [`README.md`](README.md) (como rodar) e o [`T
 
 ## 1. Resumo
 
-- `Java/` é mais um port da simulação 3D do buraco negro (os outros: C++/Vulkan, Go/OpenGL, Rust/wgpu).
+- `Java/` é o quinto port da simulação 3D do buraco negro (os outros: C++/Vulkan, Go/OpenGL, Rust/wgpu, Python/Vulkan).
 - É um **porte quase linha a linha de `C++/black_hole_vk.cpp`** para Java, usando os bindings do **LWJGL 3** (GLFW + Vulkan).
   Mesmo desenho: compute de geodésicas → imagem 200×150 → quad, sobre a grade deformada; Vulkan 1.3 com dynamic rendering e synchronization2.
 - Os 5 shaders GLSL são **cópias idênticas** dos de `C++/` (`*_vk.*`). Nada de física foi reescrito.
@@ -60,7 +60,8 @@ A divisão `sim` × renderer repete C++ (`sim.h`), Go e Rust: o pacote `sim` só
 
 | Verificação | Resultado |
 |---|---|
-| `mvn package` (compila, 6 testes, jar) | OK, 6 testes passam |
+| `mvn test` (6 testes de `sim`) | OK, 6 executados e passando. Atenção: sem o `maven-surefire-plugin` 3.x fixado no `pom.xml`, o Maven antigo reportava `Tests run: 0` e "passava" sem rodar nada |
+| `mvn package` (compila, testes, jar) | OK |
 | `java -jar target/black_hole_java.jar` por 10–15 s na RTX 3050 (Wayland) | abre, escolhe a GPU, renderiza sem exceção até o `timeout` encerrar |
 | Shaders compilam com shaderc (`vulkan1.3`) | sim — os 5 compilam na inicialização |
 

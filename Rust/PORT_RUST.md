@@ -7,7 +7,7 @@ Documento de estudo. Complementa o [`TUTORIAL_RUST.md`](TUTORIAL_RUST.md) (como 
 
 ## 1. Resumo
 
-- `Rust/` é o terceiro port da simulação 3D (os outros: C++/Vulkan em `C++/` e Go/OpenGL em `Go/`).
+- `Rust/` é o terceiro port da simulação 3D, depois do C++/Vulkan (`C++/`) e do Go/OpenGL (`Go/`); vieram depois Python/Vulkan e Java/Vulkan.
 - Usa **wgpu**: uma API gráfica moderna e portátil escrita em Rust, que por baixo usa Vulkan (Linux), Metal (macOS) ou D3D12 (Windows).
   É a rota "idiomática em Rust" para fazer o que o `C++/` faz com Vulkan puro.
 - O shader é um **porte para WGSL** (`shaders/geodesic.wgsl`) do `geodesic.comp` original (`git show ff07b3b:C++/geodesic.comp` ou `Go/shaders/geodesic.comp`). WGSL é a linguagem de shader do WebGPU.

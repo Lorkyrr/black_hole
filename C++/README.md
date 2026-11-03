@@ -21,4 +21,4 @@ Código gerado com ajuda de IA (Claude Code), como base de estudo para aprender 
 
 Sem `-DCMAKE_BUILD_TYPE=Release`, a validation layer fica ligada se estiver instalada. Docker: veja o cabeçalho do [`Dockerfile`](Dockerfile).
 
-Controles: botão esquerdo = orbitar, scroll = zoom, botão direito ou G = gravidade.
+Controles: botão esquerdo/meio = orbitar, scroll = zoom, botão direito ou G = gravidade.

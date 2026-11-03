@@ -7,7 +7,7 @@ Documento de estudo. Complementa o [`README.md`](README.md) (como rodar) e o [`T
 
 ## 1. Resumo
 
-- `Go/` é um terceiro port da simulação 3D do buraco negro (os outros: C++/Vulkan em `C++/` e Rust/wgpu em `Rust/`).
+- `Go/` é o segundo port da simulação 3D do buraco negro, depois do C++/Vulkan em `C++/` (vieram depois: Rust/wgpu, Python/Vulkan e Java/Vulkan).
 - Faz **o mesmo desenho do `black_hole.cpp` original em OpenGL 4.3**: compute shader de geodésicas → textura 200×150 → quad de tela
   cheia, com a grade de espaço-tempo deformada por baixo.
 - Os shaders (`shaders/geodesic.comp`, `grid.vert`, `grid.frag`) são **idênticos byte a byte** aos do projeto original

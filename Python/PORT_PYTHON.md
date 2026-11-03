@@ -7,7 +7,7 @@ Documento de estudo. Complementa o [`TUTORIAL_PYTHON.md`](TUTORIAL_PYTHON.md) (c
 
 ## 1. Resumo
 
-- `Python/` é o quarto port da simulação 3D (os outros: `C++/` Vulkan, `Go/` OpenGL, `Rust/` wgpu).
+- `Python/` é o quarto port da simulação 3D, depois de `C++/` (Vulkan), `Go/` (OpenGL) e `Rust/` (wgpu); veio depois `Java/` (Vulkan).
 - É um porte **linha a linha do renderer Vulkan do C++** (`black_hole_vk.cpp`), em Python: mesmos objetos Vulkan, mesma ordem, mesmas barreiras.
   Por isso ele serve para comparar com o C++ lado a lado.
 - Shaders: **os mesmos GLSL do C++**, sem alteração, compilados com `glslc`.

@@ -20,6 +20,7 @@ vulkaninfo --summary             # uma GPU com Vulkan 1.3
 Crie `Java/pom.xml` com: `maven.compiler.release` 25; o `lwjgl-bom` (versões alinhadas); dependências `lwjgl`, `lwjgl-glfw`, `lwjgl-vulkan`, `lwjgl-shaderc`
 **mais** as mesmas (menos `vulkan`) com `<classifier>natives-linux</classifier>` — são as `.so` que o Java carrega; `joml`; `junit-jupiter` (test); e o `maven-shade-plugin`
 com `mainClass blackhole.Main` para gerar um jar único.
+Fixe também o `maven-surefire-plugin` em 3.5.2: o padrão do Maven não executa JUnit 5 e `mvn test` "passa" com `Tests run: 0`.
 
 ```bash
 mvn -q package        # ainda sem código: só confere que as dependências baixam

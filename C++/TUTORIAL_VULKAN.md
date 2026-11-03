@@ -1,14 +1,14 @@
 # Tutorial: refazendo o port Vulkan do zero
 
 Este tutorial ensina a construir `black_hole_vk.cpp` passo a passo. O **porquê** de cada decisão está em
-[`VULKAN_PORT.md`](VULKAN_PORT.md); aqui o foco é o **como**, na ordem em que você escreveria o código.
+[`PORT_VULKAN.md`](PORT_VULKAN.md); aqui o foco é o **como**, na ordem em que você escreveria o código.
 
 Ideia central para não se perder: Vulkan não esconde nada. Cada coisa que o OpenGL fazia "por baixo dos panos"
 (layout de imagem, sincronização, estado de blend, formato do swapchain) vira um objeto ou uma chamada que você escreve.
 Por isso o programa tem ~450 linhas em vez de ~250.
 
-> Este código foi gerado com ajuda de IA e serve de base de estudo. O jeito de aprender de verdade é seguir os passos abaixo
-> **digitando você mesmo**, quebrando coisas de propósito e lendo as mensagens da validation layer.
+> Este código foi escrito com ajuda de IA (Claude Code) sob minha direção, como base de estudo para aprender Vulkan.
+> O jeito de aprender de verdade é seguir os passos abaixo **digitando você mesmo**, quebrando coisas de propósito e lendo as mensagens da validation layer.
 
 ## Passo 0: ambiente
 
@@ -38,7 +38,7 @@ Por quê: o renderer vira "só API". Quando o bug aparece você sabe se é físi
 
 ## Passo 2: adapte os shaders (GLSL 430 → 450 para Vulkan)
 
-O ray tracer (`geodesic.comp`) vira `geodesic_vk.comp`. As mudanças são pequenas, rode `diff` nos dois:
+O ray tracer original (`git show ff07b3b:C++/geodesic.comp`) vira `geodesic_vk.comp`. As mudanças são pequenas, rode `diff` nos dois:
 
 | Mudança | Motivo |
 |---|---|

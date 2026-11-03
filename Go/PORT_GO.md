@@ -40,7 +40,7 @@ roda em qualquer máquina, sem GPU e sem cgo.
 | `//go:embed shaders/*` | o binário é autocontido; não depende do diretório de trabalho (o C++ precisa achar os `.comp`/`.spv` na pasta atual) |
 | `runtime.LockOSThread()` em `init()` | GLFW e o contexto OpenGL só funcionam na thread principal; o runtime do Go move goroutines entre threads se você não travar |
 | `sagaMass = float32(8.54e36)` | o C++ guardava a massa em `float`; para a imagem bater, o Go usa o mesmo valor arredondado |
-| `Mass [MaxObjects][4]float32` no UBO | em std140 cada `float` de um array ocupa 16 bytes. O struct C++ original usava 4 e estava errado (ver `C++/VULKAN_PORT.md` §5.5); aqui o layout está certo |
+| `Mass [MaxObjects][4]float32` no UBO | em std140 cada `float` de um array ocupa 16 bytes. O struct C++ original usava 4 e estava errado (ver `C++/PORT_VULKAN.md` §5.5); aqui o layout está certo |
 | Quad com `gl.TRIANGLES` | o C++ usava `GL_TRIANGLE_STRIP` com 6 vértices pensados para triângulos, desenhando um triângulo duplicado |
 | Blend continua ligado depois do grid | mantido **de propósito** para a imagem sair igual ao original: é isso que deixa a grade aparecer por trás do buraco negro |
 | `gl.InitWithProcAddrFunc(glfw.GetProcAddress)` | no Wayland o contexto é EGL; o carregador padrão do `go-gl` usa `glXGetProcAddress` e falha |
@@ -77,5 +77,4 @@ roda em qualquer máquina, sem GPU e sem cgo.
 - Não testado em X11 puro, macOS ou Windows. macOS limita o OpenGL a 4.1, então o compute shader não roda lá.
 - O mesmo risco de timeout de driver (dispatch longo: 60000 passos por pixel) vale aqui.
 - Os testes cobrem só o pacote `sim`. `render.go` não tem teste automático (precisa de contexto OpenGL).
-- O README ainda cita arquivos de `C++/` que foram removidos do repositório (`geodesic.comp`, `grid.*`): os shaders originais
-  agora só existem em `Go/shaders/` e no repositório upstream.
+- Os shaders GLSL originais (`geodesic.comp`, `grid.*`) saíram de `C++/`: as únicas cópias no fork são as de `Go/shaders/`; no histórico estão em `git show ff07b3b:C++/geodesic.comp`.

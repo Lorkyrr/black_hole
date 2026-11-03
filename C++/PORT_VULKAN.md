@@ -1,59 +1,59 @@
-# Port para Vulkan: tudo o que foi feito
+# Port para Vulkan: o que foi feito e por quê
 
-Documento de estudo. Descreve o que mudou no repositório, por que cada decisão foi tomada, como foi verificado
-e o que ficou de fora. Tudo está na branch `feature/vulkan-port` do fork. Para refazer o port passo a passo, veja [`TUTORIAL_VULKAN.md`](TUTORIAL_VULKAN.md).
+Documento de estudo. Complementa o [`README.md`](README.md) (como rodar) e o [`TUTORIAL_VULKAN.md`](TUTORIAL_VULKAN.md) (como refazer).
 
-> Código gerado com ajuda de IA (Claude Code) como base de estudo para aprender Vulkan. Nota de estado atual: depois deste
-> documento ser escrito, os programas OpenGL do C++ (`black_hole.cpp`, `2D_lensing.cpp`, `CPU-geodesic.cpp`, `ray_tracing.cpp`) e os
-> shaders GL foram **removidos do fork** (continuam no upstream e no histórico do git). As menções a eles abaixo descrevem o port
-> como foi feito e servem de comparação OpenGL → Vulkan.
+> Este código foi escrito com ajuda de IA (Claude Code) sob minha direção, como **base de estudo para aprender Vulkan na prática**.
+> Não foi escrito linha a linha por mim; o objetivo é ler, quebrar e modificar.
+
+> **Estado atual:** os programas OpenGL do C++ (`black_hole.cpp`, `2D_lensing.cpp`, `CPU-geodesic.cpp`, `ray_tracing.cpp`) e os shaders GL
+> foram **removidos do fork**. Eles existem no upstream e no histórico (`git show ff07b3b:C++/black_hole.cpp`). As menções a eles abaixo
+> descrevem o port como foi feito e servem de comparação OpenGL → Vulkan; as seções marcadas *(histórico)* já não se aplicam ao código atual.
 
 ## 1. Resumo
 
 - Nasceu uma versão Vulkan 1.3 da simulação 3D: `black_hole_vk.cpp` + 5 shaders `*_vk.*`.
-- A versão OpenGL (`black_hole.cpp`) **continua existindo** e continua compilando. Só foi refatorada para dividir código com a versão Vulkan (`sim.h`).
-- Todo o código C++ do projeto foi movido para a pasta `C++/`, junto com um `Dockerfile` e este documento.
+- O OpenGL original (`black_hole.cpp`) serviu de referência e foi refatorado para dividir código com o Vulkan (`sim.h`). Depois foi removido do fork (ver nota acima).
+- Todo o código C++ do projeto foi movido para a pasta `C++/`, junto com um `Dockerfile`, este documento e o tutorial.
 - O Vulkan **não deixa a simulação mais rápida**: o gargalo é o compute shader (60000 passos por pixel), que é o mesmo trabalho nas duas APIs. O ganho do port é controle explícito e aprendizado.
 
 ## 2. Mapa de arquivos
 
 ```
 black_hole/
-├── README.md                  # editado: passos agora usam C++/, nova seção Vulkan/Docker
+├── README.md                  # README geral (inglês)
 ├── Go/, Rust/                 # ports posteriores (Go/OpenGL e Rust/wgpu), cada um com seus docs
 ├── Gravity_Sim.zip            # não foi tocado (contém código-fonte antigo do autor)
 └── C++/
-    ├── CMakeLists.txt         # editado: alvo opcional BlackHoleVK + compilação dos shaders
-    ├── 2D_lensing.cpp, CPU-geodesic.cpp, ray_tracing.cpp   # movidos, sem mudança
-    ├── black_hole.cpp         # movido + refatorado (usa sim.h)
-    ├── geodesic.comp, grid.vert, grid.frag                 # shaders GL, movidos, sem mudança
-    ├── sim.h                  # NOVO: código sem API gráfica, compartilhado GL/Vulkan
-    ├── black_hole_vk.cpp      # NOVO: o renderer Vulkan (~450 linhas)
-    ├── geodesic_vk.comp       # NOVO: ray tracer para Vulkan (derivado do geodesic.comp)
-    ├── grid_vk.vert/.frag     # NOVO: linhas do grid
-    ├── quad_vk.vert/.frag     # NOVO: quad de tela cheia que mostra o resultado do ray tracer
-    ├── Dockerfile, .dockerignore   # NOVO
-    └── VULKAN_PORT.md         # este documento
+    ├── README.md              # como compilar e rodar
+    ├── PORT_VULKAN.md         # este documento
+    ├── TUTORIAL_VULKAN.md     # tutorial passo a passo
+    ├── CMakeLists.txt         # só Vulkan: alvo BlackHoleVK (executável black_hole_cpp) + compilação dos shaders
+    ├── sim.h                  # código sem API gráfica (câmera, gravidade, grid)
+    ├── black_hole_vk.cpp      # o renderer Vulkan (~450 linhas)
+    ├── geodesic_vk.comp       # ray tracer para Vulkan (derivado do geodesic.comp original)
+    ├── grid_vk.vert/.frag     # linhas do grid
+    ├── quad_vk.vert/.frag     # quad de tela cheia que mostra o resultado do ray tracer
+    └── Dockerfile, .dockerignore
 ```
 
-Os arquivos rastreados foram movidos com `git mv`, então o histórico é preservado.
+Os arquivos originais foram movidos para `C++/` com `git mv` (commit `ff07b3b`), então o histórico é preservado.
 
 ## 3. O que mudou em cada arquivo
 
-### 3.1 `sim.h` (novo) e `black_hole.cpp` (refatorado)
+### 3.1 `sim.h` e a refatoração do `black_hole.cpp` *(histórico)*
 
 `sim.h` recebeu, **sem alterar a lógica**, o que não depende de API gráfica:
 `Camera`, `BlackHole`, `ObjectData`, a lista `objects`, `setupCameraCallbacks`, o laço de gravidade (agora `stepGravity()`)
 e a geração da malha do grid (agora `buildGrid(objects, vertices, indices)`, com `GRID_SIZE = 25`).
 
-Em `black_hole.cpp`: 247 linhas removidas e 5 inseridas. Ele agora faz `#include "sim.h"`, chama `stepGravity()` e `buildGrid()`.
-O que sobrou é só OpenGL (`Engine`: shaders, UBOs, VAO/VBO, desenho).
+No `black_hole.cpp` da época: 247 linhas removidas e 5 inseridas. Ele passou a fazer `#include "sim.h"`, chamar `stepGravity()` e `buildGrid()`,
+e o que sobrou era só OpenGL (`Engine`: shaders, UBOs, VAO/VBO, desenho).
 
-Regra para quem inclui `sim.h`: incluir antes o header da sua API (`<GL/glew.h>` ou `#define GLFW_INCLUDE_VULKAN`).
+Regra para quem inclui `sim.h`: definir antes `GLFW_INCLUDE_VULKAN` (como faz `black_hole_vk.cpp`). Hoje só o renderer Vulkan o inclui.
 
 ### 3.2 Shaders (`*_vk.*`)
 
-`geodesic_vk.comp` é o `geodesic.comp` com:
+`geodesic_vk.comp` é o `geodesic.comp` original (`git show ff07b3b:C++/geodesic.comp`, ou `Go/shaders/geodesic.comp`) com:
 
 | Mudança | Motivo |
 |---|---|
@@ -99,18 +99,21 @@ Um frame (`frame()`):
 
 ### 3.4 `CMakeLists.txt`
 
-Ao final do arquivo, bloco `find_package(Vulkan COMPONENTS glslc)`. Se achar, define o alvo `BlackHoleVK`,
+Originalmente era um bloco opcional ao final do arquivo; **hoje o `CMakeLists.txt` é só Vulkan** (os alvos OpenGL e 2D foram removidos)
+e `find_package(Vulkan REQUIRED COMPONENTS glslc)` é obrigatório. Ele define o alvo `BlackHoleVK` (executável `black_hole_cpp`),
 compila os 5 shaders para `build/shaders/*.spv` (com `DEPENDS`, então recompila quando o `.comp` muda) e copia os `.spv`
-para a pasta do executável. Se não achar, imprime uma mensagem e **segue sem o alvo**, então quem só tem OpenGL não é afetado.
+para a pasta do executável.
 
 ### 3.5 `Dockerfile`
 
 Multi-stage em `ubuntu:24.04`:
-- **build**: instala toolchain, GLFW, GLM, Vulkan, glslc (e GLEW/GL só porque o CMake faz `find_package(... REQUIRED)` para os alvos GL), compila só `--target BlackHoleVK`.
+- **build**: instala toolchain, GLFW, GLM, Vulkan e glslc, e compila o projeto (que só tem o alvo `BlackHoleVK`).
 - **runtime**: `libvulkan1`, `mesa-vulkan-drivers` (Intel/AMD e lavapipe), `libglfw3`, e copia o executável + `.spv`. Imagem final: 553 MB.
 - Comandos de execução estão no cabeçalho do arquivo e no README. O driver NVIDIA entra via `nvidia-container-toolkit`.
 
 ## 4. Mapeamento OpenGL → Vulkan (a parte para estudar)
+
+(A coluna da esquerda descreve o `black_hole.cpp` original do upstream.)
 
 | OpenGL (`black_hole.cpp`) | Vulkan (`black_hole_vk.cpp`) |
 |---|---|
@@ -151,7 +154,7 @@ no diretório temporário, sem instalar nada no sistema.
 |---|---|
 | Compilação de `black_hole_vk.cpp` (`-Wall -Wextra`) | OK, sem erros; único aviso é de código antigo (variável `radius` em `sim.h`) |
 | Shaders → SPIR-V com `glslc` | os 5 compilam |
-| `black_hole.cpp` (refatorado) | passa em `-fsyntax-only` (com stub do GLEW); nunca foi executado já refatorado |
+| `black_hole.cpp` refatorado *(histórico)* | passou em `-fsyntax-only` (com stub do GLEW); nunca foi executado já refatorado, e depois foi removido |
 | Execução na RTX 3050 com a validation layer (cópia de teste que grava o frame) | 4 frames sem nenhuma mensagem de validação (depois da correção do item 5.1) |
 | Execução em RADV (AMD) e lavapipe (CPU) | roda; RADV e NVIDIA diferem em só 1.757 pixels |
 | IntelliSense do VS Code (`getDiagnostics`) | sem problemas em `black_hole_vk.cpp` |
@@ -182,7 +185,7 @@ Todo o aparato de captura (patches que gravam o frame em PPM, sysroot, binários
 Nativo (Ubuntu/Debian):
 
 ```bash
-sudo apt install build-essential cmake libglfw3-dev libglm-dev libglew-dev libgl-dev \
+sudo apt install build-essential cmake libglfw3-dev libglm-dev \
                  libvulkan-dev glslc vulkan-validationlayers mesa-vulkan-drivers
 cd C++
 cmake -B build -S . && cmake --build build --target BlackHoleVK
@@ -200,15 +203,15 @@ docker run --rm -it $X --gpus all -e NVIDIA_DRIVER_CAPABILITIES=all black-hole-v
 docker run --rm -it $X --device /dev/dri black-hole-vk                              # Intel / AMD
 ```
 
-Controles (iguais ao OpenGL): botão esquerdo orbita, scroll dá zoom, `G` ou botão direito liga a gravidade.
+Controles (os mesmos do original): botão esquerdo orbita, scroll dá zoom, `G` ou botão direito liga a gravidade.
 
 ## 9. Roteiro de estudo sugerido
 
-1. Leia `geodesic_vk.comp` e compare com `geodesic.comp` (`diff`): são só 7 mudanças pequenas.
+1. Leia `geodesic_vk.comp` e compare com o original (`git show ff07b3b:C++/geodesic.comp | diff - geodesic_vk.comp`): são só 7 mudanças pequenas.
 2. Leia `sim.h` para ver o que é lógica e o que é API.
 3. Leia `black_hole_vk.cpp` na ordem do construtor (seção 3.3) e depois `record()` com as barreiras. Pergunta-guia: *por que cada barreira existe e o que quebraria sem ela?*
 4. Rode com a validation layer e **quebre de propósito**: remova uma barreira, troque um `stageMask`, esqueça o `set =` no shader. As mensagens da layer são o melhor professor.
-5. Exercícios: (a) implementar 2 frames em voo; (b) trocar o quad por `vkCmdBlitImage` e ver o grid sumir; (c) corrigir os itens 5.3 e 5.4 no `black_hole.cpp`; (d) exercitar o redimensionamento.
+5. Exercícios: (a) implementar 2 frames em voo; (b) trocar o quad por `vkCmdBlitImage` e ver o grid sumir; (c) corrigir os itens 5.3 e 5.4 no `black_hole.cpp` do upstream; (d) exercitar o redimensionamento.
 
 ## 10. Observações fora do escopo
 

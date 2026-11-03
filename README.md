@@ -105,19 +105,19 @@ cargo test
 
 ## Documentation
 
-The documents below are written in Portuguese. Each port has an explanation (what and why) and a tutorial (how).
+The documents below are written in Portuguese. Each port folder has a short `README.md` (how to run), an explanation (what and why) and a tutorial (how).
 
 | Port | What was done and why | Step-by-step tutorial |
 |---|---|---|
-| C++ / Vulkan | [`C++/VULKAN_PORT.md`](C++/VULKAN_PORT.md) | [`C++/TUTORIAL_VULKAN.md`](C++/TUTORIAL_VULKAN.md) |
+| C++ / Vulkan | [`C++/PORT_VULKAN.md`](C++/PORT_VULKAN.md) | [`C++/TUTORIAL_VULKAN.md`](C++/TUTORIAL_VULKAN.md) |
 | Go | [`Go/PORT_GO.md`](Go/PORT_GO.md) | [`Go/TUTORIAL_GO.md`](Go/TUTORIAL_GO.md) |
 | Rust | [`Rust/PORT_RUST.md`](Rust/PORT_RUST.md) | [`Rust/TUTORIAL_RUST.md`](Rust/TUTORIAL_RUST.md) |
 
 ## Honest status
 
 - **Verified:** the Vulkan build runs on an NVIDIA RTX 3050 with zero validation-layer messages, and was compared pixel by pixel against
-  the original OpenGL output (0.7% of pixels differ, explained in `C++/VULKAN_PORT.md`). Go `sim` tests and the Rust tests pass.
-  The Go and Rust programs compile and open a window.
+  the original OpenGL output (0.7% of pixels differ, explained in `C++/PORT_VULKAN.md`). Go `sim` tests and the Rust tests pass.
+  The Go program builds and passes `go vet`; the Rust program ran for a few seconds without crashing (neither was run interactively).
 - **Not verified:** the Go and Rust images were not compared against the C++ output; window resizing; macOS; Intel/AMD hardware
   (beyond a software/RADV run of the Vulkan version); long interactive sessions.
 - Vulkan does **not** make the simulation faster than OpenGL here. The bottleneck is the compute shader (60,000 steps per pixel),

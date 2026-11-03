@@ -60,7 +60,7 @@ mesma precisão do C++ (a massa é `float32`, as contas intermediárias são `fl
 
 ## Passo 3: shaders embutidos
 
-Copie `geodesic.comp`, `grid.vert`, `grid.frag` do projeto original para `shaders/`. Em `render.go`:
+Copie `geodesic.comp`, `grid.vert`, `grid.frag` do projeto original (upstream, ou `git show ff07b3b:C++/geodesic.comp`) para `shaders/`. Em `render.go`:
 
 ```go
 //go:embed shaders/*

@@ -1,7 +1,12 @@
 # Port para Vulkan: tudo o que foi feito
 
 Documento de estudo. Descreve o que mudou no repositório, por que cada decisão foi tomada, como foi verificado
-e o que ficou de fora. Tudo está na branch `feature/vulkan-port` (nada foi commitado).
+e o que ficou de fora. Tudo está na branch `feature/vulkan-port` do fork. Para refazer o port passo a passo, veja [`TUTORIAL_VULKAN.md`](TUTORIAL_VULKAN.md).
+
+> Código gerado com ajuda de IA (Claude Code) como base de estudo para aprender Vulkan. Nota de estado atual: depois deste
+> documento ser escrito, os programas OpenGL do C++ (`black_hole.cpp`, `2D_lensing.cpp`, `CPU-geodesic.cpp`, `ray_tracing.cpp`) e os
+> shaders GL foram **removidos do fork** (continuam no upstream e no histórico do git). As menções a eles abaixo descrevem o port
+> como foi feito e servem de comparação OpenGL → Vulkan.
 
 ## 1. Resumo
 
@@ -15,11 +20,10 @@ e o que ficou de fora. Tudo está na branch `feature/vulkan-port` (nada foi comm
 ```
 black_hole/
 ├── README.md                  # editado: passos agora usam C++/, nova seção Vulkan/Docker
-├── Rust/                      # NÃO é meu, não foi tocado
-├── vs_code/, Gravity_Sim.zip, black_hole.exe   # não foram tocados
+├── Go/, Rust/                 # ports posteriores (Go/OpenGL e Rust/wgpu), cada um com seus docs
+├── Gravity_Sim.zip            # não foi tocado (contém código-fonte antigo do autor)
 └── C++/
     ├── CMakeLists.txt         # editado: alvo opcional BlackHoleVK + compilação dos shaders
-    ├── vcpkg.json             # movido, sem mudança
     ├── 2D_lensing.cpp, CPU-geodesic.cpp, ray_tracing.cpp   # movidos, sem mudança
     ├── black_hole.cpp         # movido + refatorado (usa sim.h)
     ├── geodesic.comp, grid.vert, grid.frag                 # shaders GL, movidos, sem mudança
@@ -167,8 +171,7 @@ Todo o aparato de captura (patches que gravam o frame em PPM, sysroot, binários
 ## 7. O que NÃO foi verificado
 
 - **Redimensionar a janela**: o caminho `recreateSwapchain()` foi escrito mas não exercitado.
-- **Windows e macOS** (MoltenVK) e GPUs Intel.
-- **Fluxo com vcpkg**: o `vcpkg.json` não foi alterado e o alvo Vulkan usa o Vulkan do sistema, não do vcpkg.
+- **macOS** (MoltenVK) e GPUs Intel.
 - **Container com a validation layer** (build `Debug`) e container em Intel/AMD: o teste foi só na NVIDIA.
 - Execução prolongada ou interativa: os testes pegaram só os primeiros frames, sem mexer a câmera com o mouse nem ligar a gravidade (`G`).
 - A validation layer foi usada na **cópia de teste** que grava o frame; o binário final do repositório foi executado com ela só antes da correção do item 5.1. O container usa build `Release` (sem validation layer).
@@ -183,7 +186,7 @@ sudo apt install build-essential cmake libglfw3-dev libglm-dev libglew-dev libgl
                  libvulkan-dev glslc vulkan-validationlayers mesa-vulkan-drivers
 cd C++
 cmake -B build -S . && cmake --build build --target BlackHoleVK
-cd build && ./BlackHoleVK
+cd build && ./black_hole_cpp
 ```
 
 (Sem `-DCMAKE_BUILD_TYPE=Release`, a validation layer fica ligada se estiver instalada. Para desligar: `Release`.)
@@ -209,6 +212,4 @@ Controles (iguais ao OpenGL): botão esquerdo orbita, scroll dá zoom, `G` ou bo
 
 ## 10. Observações fora do escopo
 
-- A pasta `Rust/` apareceu durante o trabalho e **não foi tocada**. O VS Code mostra erros de compilação em `Rust/src/gpu.rs` (por exemplo `missing field color_space`, `perspective_rh` não encontrado), o que sugere incompatibilidade de versões do `wgpu`/`glam` no `Cargo.toml`.
-- `vs_code/tasks.json` e `c_cpp_properties.json` ainda apontam para caminhos antigos (`src/black_hole.cpp`, MSYS2 no Windows) e não foram atualizados.
-- `black_hole.exe` e `Gravity_Sim.zip` continuam na raiz.
+- `Rust/` e `Go/` são ports posteriores da mesma simulação, documentados em [`../Rust/PORT_RUST.md`](../Rust/PORT_RUST.md) e [`../Go/PORT_GO.md`](../Go/PORT_GO.md). Os erros de compilação do `wgpu`/`glam` citados numa versão anterior deste texto foram corrigidos (`cargo test` passa).

@@ -1,7 +1,9 @@
 # Black hole em Go (OpenGL 4.3, Wayland)
 
-Mesmo desenho do `C++/black_hole.cpp`: compute shader de geodésicas -> textura 200x150 -> quad, com a grade de espaço-tempo por baixo.
-Os shaders em `shaders/` são cópias de `C++/geodesic.comp`, `grid.vert` e `grid.frag`, embutidos no binário com `go:embed`.
+Mesmo desenho do `black_hole.cpp` original (OpenGL, removido deste fork mas presente no upstream): compute shader de geodésicas -> textura 200x150 -> quad, com a grade de espaço-tempo por baixo.
+Os shaders em `shaders/` são cópias dos originais (`geodesic.comp`, `grid.vert`, `grid.frag`), embutidos no binário com `go:embed`.
+
+Documentação: [`PORT_GO.md`](PORT_GO.md) (o que foi feito e por quê) e [`TUTORIAL_GO.md`](TUTORIAL_GO.md) (passo a passo). Código gerado com ajuda de IA, como base de estudo.
 
 ## Dependências (Debian/Ubuntu)
 

@@ -37,6 +37,7 @@ Mesma divisão dos outros ports: `sim.py` não conhece a GPU; `gpu_layout.py` s�
 | `glfw` (pyGLFW) | o wheel traz a `libglfw` com backend Wayland; não exige `libglfw3` do sistema. `init_hint(PLATFORM, WAYLAND)` força Wayland nativo, sem XWayland |
 | `glfw.create_window_surface` | o pyGLFW converte o handle cffi do `vulkan` sozinho; não precisa de `vkCreateWaylandSurfaceKHR` à mão |
 | Funções de extensão por `vkGetInstanceProcAddr`/`vkGetDeviceProcAddr` | o módulo `vulkan` não exporta `vkCreateSwapchainKHR`, `vkQueuePresentKHR` etc.; o `Renderer` as guarda como atributos |
+| `main.py` reexecuta via `uv run` se faltar `glfw` | quem roda `python3 main.py` cai no Python do sistema, sem as dependências; sem `uv`, sai com uma mensagem clara |
 | `glslc` chamado por `subprocess` na primeira execução | o CMake do C++ compila no build; aqui não há build. Só recompila se o `.spv` for mais velho que o fonte. `GLSLC` aponta para um binário fora do PATH |
 | `gpu_layout.py` separado | o layout std140 é a parte mais fácil de errar; isolado em numpy dá para testar sem GPU (`test_ubo_sizes_...`) |
 | Matriz de câmera em numpy (float64, cast para float32 no fim) | o intervalo 1e9..1e14 do plano near/far pede a precisão extra antes de gravar; a matriz é gravada coluna-maior (transposta) |

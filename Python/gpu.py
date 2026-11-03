@@ -27,10 +27,11 @@ def die(msg: str):
 
 def compile_shaders() -> None:
     """GLSL -> SPIR-V com glslc (o CMake do C++ faz o mesmo no build). Só recompila se o .spv estiver velho."""
-    glslc = os.environ.get("GLSLC") or shutil.which("glslc") or die("glslc não encontrado (sudo apt install glslc)")
     for name in SHADERS:
         src, spv = SHADER_DIR / name, SHADER_DIR / (name + ".spv")
         if not spv.exists() or spv.stat().st_mtime < src.stat().st_mtime:
+            # só exige o glslc quando há algo para compilar
+            glslc = os.environ.get("GLSLC") or shutil.which("glslc") or die("glslc não encontrado (sudo apt install glslc)")
             subprocess.run([glslc, "--target-env=vulkan1.3", str(src), "-o", str(spv)], check=True)
 
 

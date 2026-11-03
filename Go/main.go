@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 
 	"blackhole/sim"
@@ -12,7 +13,18 @@ import (
 
 func init() { runtime.LockOSThread() } // GLFW e OpenGL exigem a thread principal
 
+// preferNvidia pede a GPU NVIDIA em notebooks híbridos (o OpenGL cairia na integrada, via Mesa).
+// Tem de rodar antes de glfw.Init. Não sobrescreve o que o usuário já definiu; sem driver NVIDIA, o Mesa continua como fallback.
+func preferNvidia() {
+	for k, v := range map[string]string{"__NV_PRIME_RENDER_OFFLOAD": "1", "__GLX_VENDOR_LIBRARY_NAME": "nvidia"} {
+		if _, ok := os.LookupEnv(k); !ok {
+			os.Setenv(k, v)
+		}
+	}
+}
+
 func main() {
+	preferNvidia()
 	if err := glfw.Init(); err != nil {
 		panic(err)
 	}

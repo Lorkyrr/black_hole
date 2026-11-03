@@ -44,6 +44,7 @@ roda em qualquer máquina, sem GPU e sem cgo.
 | Quad com `gl.TRIANGLES` | o C++ usava `GL_TRIANGLE_STRIP` com 6 vértices pensados para triângulos, desenhando um triângulo duplicado |
 | Blend continua ligado depois do grid | mantido **de propósito** para a imagem sair igual ao original: é isso que deixa a grade aparecer por trás do buraco negro |
 | `gl.InitWithProcAddrFunc(glfw.GetProcAddress)` | no Wayland o contexto é EGL; o carregador padrão do `go-gl` usa `glXGetProcAddress` e falha |
+| `preferNvidia()` em `main.go` | em notebook híbrido o OpenGL escolhia o Mesa (GPU integrada); as variáveis PRIME são definidas antes do `glfw.Init`. Verificado: imprime `OpenGL 4.3.0 NVIDIA` na RTX 3050 |
 | `-tags wayland` | compila o GLFW para Wayland nativo, sem XWayland; dispensa os headers X11 (`xorg-dev`) |
 | `aspect` constante 800/600 | como no C++: o ray tracer sempre renderiza 200×150, independente do tamanho da janela |
 | `moving` só em `Dragging` | o original também considerava `panning`; no port o botão do meio faz o mesmo que o esquerdo |

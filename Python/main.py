@@ -3,9 +3,16 @@
     uv run main.py            # janela
     uv run main.py --frames N # sai depois de N frames (teste de fumaça)
 """
+import os
+import shutil
 import sys
 
-import glfw
+try:
+    import glfw
+except ModuleNotFoundError:  # rodou com o python do sistema: as dependências vivem no venv do uv
+    if uv := shutil.which("uv"):
+        os.execv(uv, [uv, "run", os.path.abspath(__file__), *sys.argv[1:]])
+    sys.exit("glfw não encontrado: instale o uv (curl -LsSf https://astral.sh/uv/install.sh | sh) e rode `uv run main.py`")
 
 import gpu
 import gpu_layout as L

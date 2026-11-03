@@ -20,3 +20,5 @@ GLFW e `go-gl` usam cgo:
 Controles: botão esquerdo/meio = orbitar, scroll = zoom, botão direito ou G = gravidade, Esc = sair.
 
 Sem `-tags wayland` o GLFW compila para X11 (precisa de `xorg-dev`).
+
+Em notebook híbrido o OpenGL cairia na GPU integrada (Mesa). `main.go` define `__NV_PRIME_RENDER_OFFLOAD=1` e `__GLX_VENDOR_LIBRARY_NAME=nvidia` antes do `glfw.Init` para usar a NVIDIA (sem sobrescrever variáveis já definidas; sem driver NVIDIA, o Mesa segue como fallback). O programa imprime a versão do OpenGL: `NVIDIA` nela confirma a escolha.

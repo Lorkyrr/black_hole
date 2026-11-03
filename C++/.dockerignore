@@ -1,5 +1,3 @@
 .git
 build
-*.exe
 *.zip
-vs_code

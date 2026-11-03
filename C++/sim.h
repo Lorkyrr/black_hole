@@ -1,13 +1,12 @@
 #pragma once
-// Parte compartilhada entre black_hole.cpp (OpenGL) e black_hole_vk.cpp (Vulkan): sem nenhuma chamada de API gráfica.
-// O .cpp que inclui este header deve incluir o header da sua API antes (GLEW / GLFW_INCLUDE_VULKAN).
+// Código sem chamada de API gráfica (câmera, gravidade, malha do grid), usado por black_hole_vk.cpp.
+// O .cpp que inclui este header deve definir GLFW_INCLUDE_VULKAN antes.
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <iostream>
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
 #include <iomanip>

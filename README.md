@@ -42,6 +42,7 @@ It is a study fork, not a replacement for the upstream project. It contains the 
 |---|---|---|---|
 | [`C++/`](C++/) | C++17 | **Vulkan 1.3** (dynamic rendering, synchronization2) | explicit GPU programming: swapchain, descriptors, pipelines, barriers |
 | [`Go/`](Go/) | Go | OpenGL 4.3 (via cgo, `go-gl`) | Go modules, packages, `embed`, cgo, testing the CPU side without a GPU |
+| [`Java/`](Java/) | Java 25+ | **Vulkan 1.3** via LWJGL 3 | Maven, bindings nativos (JNI), `MemoryStack`, shaders compilados em runtime com shaderc |
 | [`Rust/`](Rust/) | Rust (edition 2024) | **wgpu** (Vulkan underneath), WGSL shaders | safe GPU code, `bytemuck`, `winit` 0.30, what wgpu automates compared to raw Vulkan |
 | [`Python/`](Python/) | Python 3.12+ (managed by `uv`) | **Vulkan 1.3** (raw, via the `vulkan` cffi bindings), GLFW on Wayland | the same Vulkan renderer as `C++/` line by line, in a high-level language; `uv`, cffi, testing std140 layouts without a GPU |
 
@@ -122,6 +123,7 @@ The documents below are written in Portuguese. Each port folder has a short `REA
 | C++ / Vulkan | [`C++/PORT_VULKAN.md`](C++/PORT_VULKAN.md) | [`C++/TUTORIAL_VULKAN.md`](C++/TUTORIAL_VULKAN.md) |
 | Go | [`Go/PORT_GO.md`](Go/PORT_GO.md) | [`Go/TUTORIAL_GO.md`](Go/TUTORIAL_GO.md) |
 | Rust | [`Rust/PORT_RUST.md`](Rust/PORT_RUST.md) | [`Rust/TUTORIAL_RUST.md`](Rust/TUTORIAL_RUST.md) |
+| Java / Vulkan | [`Java/PORT_JAVA.md`](Java/PORT_JAVA.md) | [`Java/TUTORIAL_JAVA.md`](Java/TUTORIAL_JAVA.md) |
 | Python / Vulkan | [`Python/PORT_PYTHON.md`](Python/PORT_PYTHON.md) | [`Python/TUTORIAL_PYTHON.md`](Python/TUTORIAL_PYTHON.md) |
 
 ## Honest status

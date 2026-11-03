@@ -111,7 +111,9 @@ _deps
 # Built executables for distribution
 dist/
 black_hole_cpp*
+C++.exe
 *.spv
-# Local builds of the Go and Rust ports (see Go/README.md and Rust/TUTORIAL_RUST.md)
+# Local builds of the Go, Rust and Java ports (see Go/README.md, Rust/TUTORIAL_RUST.md and Java/README.md)
 Go_exe
 Rust_exe
+Java.jar
